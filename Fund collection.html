@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>South Eastern 2022 Batch Fund</title>
+  <style>
+    /* Integrated Styles from style.css */
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #e0e7ff;
+      --success: #10b981;
+      --success-bg: #d1fae5;
+      --danger: #ef4444;
+      --danger-bg: #fee2e2;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    nav {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+    }
+
+    .stat-card.balance::before {
+      background: var(--primary);
+    }
+
+    .stat-card.income::before {
+      background: var(--success);
+    }
+
+    .stat-card.expense::before {
+      background: var(--danger);
+    }
+
+    .stat-card h3 {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-card p {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-top: 0.75rem;
+    }
+
+    .stat-card.balance p {
+      color: var(--primary);
+    }
+
+    .stat-card.income p {
+      color: var(--success);
+    }
+
+    .stat-card.expense p {
+      color: var(--danger);
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 0.5rem;
+    }
+
+    th,
+    td {
+      padding: 1rem 1.25rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background-color: var(--bg-color);
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    #search-collections {
+      padding: 0.75rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 300px;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <h1>South Eastern University 2022 Batch Fund</h1>
+  </nav>
+
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card balance">
+        <h3>Current Balance</h3>
+        <p id="stat-balance">Rs. 0</p>
+      </div>
+      <div class="stat-card income">
+        <h3>Total Collected</h3>
+        <p id="stat-collected">Rs. 0</p>
+      </div>
+      <div class="stat-card expense">
+        <h3>Total Expenses</h3>
+        <p id="stat-expenses">Rs. 0</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+        <h2>Recent Collections</h2>
+        <input type="text" id="search-collections" placeholder="Search by Contributor Name...">
+      </div>
+      <div class="table-responsive">
+        <table id="collections-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Contributor</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Recent Expenses</h2>
+      <div class="table-responsive">
+        <table id="expenses-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; <span id="year"></span> South Eastern University 2022 Batch Fund.</p>
+    <p>Developed by <a href="https://darkshadow110.github.io/thilankawishka/" target="_blank"
+        style="color: var(--primary); text-decoration: none; font-weight: bold;">Thilan Kawishka</a></p>
+  </footer>
+
+  <script>
+    // Data Inputs
+    const contributors = [
+      {
+        "id": "C64112986",
+        "name": "Cama",
+        "active": true
+      },
+      {
+        "id": "C2C5DB250",
+        "name": "Void",
+        "active": true
+      },
+      {
+        "id": "C9C6DD042",
+        "name": "Rika",
+        "active": true
+      }
+    ];
+
+    const collections = [
+      {
+        "id": "COL36185156",
+        "contributorId": "C64112986",
+        "amount": 2000,
+        "date": "2026-03-02",
+        "type": "weekly"
+      },
+      {
+        "id": "COL74C0D083",
+        "contributorId": "C9C6DD042",
+        "amount": 2000,
+        "date": "2026-03-04",
+        "type": "weekly"
+      },
+      {
+        "id": "COL5E852D48",
+        "contributorId": "C2C5DB250",
+        "amount": 2000,
+        "date": "2026-03-04",
+        "type": "weekly"
+      }
+    ];
+
+    const expenses = [];
+
+    // Helper to get Contributor Name
+    const getContributorName = (id) => {
+      const person = contributors.find(c => c.id === id);
+      return person ? person.name : "Unknown";
+    };
+
+    function initDashboard() {
+      // 1. Calculate Totals
+      const totalCollected = collections.reduce((sum, item) => sum + item.amount, 0);
+      const totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0);
+      const balance = totalCollected - totalExpenses;
+
+      // 2. Update Stats DOM
+      document.getElementById('stat-collected').textContent = `Rs. ${totalCollected.toLocaleString()}`;
+      document.getElementById('stat-expenses').textContent = `Rs. ${totalExpenses.toLocaleString()}`;
+      document.getElementById('stat-balance').textContent = `Rs. ${balance.toLocaleString()}`;
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // 3. Render Expenses
+      const expBody = document.querySelector('#expenses-table tbody');
+      expenses.forEach(exp => {
+        const row = `<tr><td>${exp.date}</td><td>${exp.title}</td><td>${exp.description}</td><td>Rs. ${exp.amount}</td></tr>`;
+        expBody.innerHTML += row;
+      });
+
+      // 4. Render Collections (with search support)
+      renderCollections(collections);
+    }
+
+    function renderCollections(data) {
+      const collBody = document.querySelector('#collections-table tbody');
+      collBody.innerHTML = '';
+      data.forEach(col => {
+        const row = `<tr><td>${col.date}</td><td>${getContributorName(col.contributorId)}</td><td>Rs. ${col.amount}</td></tr>`;
+        collBody.innerHTML += row;
+      });
+    }
+
+    // Search Logic
+    document.getElementById('search-collections').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      const filtered = collections.filter(col =>
+        getContributorName(col.contributorId).toLowerCase().includes(term)
+      );
+      renderCollections(filtered);
+    });
+
+    window.onload = initDashboard;
+  </script>
+</body>
+
+</html>
