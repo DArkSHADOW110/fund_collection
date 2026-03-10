@@ -9,20 +9,23 @@
   <style>
     /* Integrated Styles from style.css */
     :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --primary-light: #e0e7ff;
+      --primary: #673AB7;
+      /* Deep Purple */
+      --primary-hover: #512DA8;
+      --primary-light: #EDE7F6;
       --success: #10b981;
       --success-bg: #d1fae5;
       --danger: #ef4444;
       --danger-bg: #fee2e2;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #0f172a;
+      --bg-color: #F8F9FA;
+      /* Soft White Base */
+      --card-bg: rgba(255, 255, 255, 0.65);
+      /* Glass effect */
+      --text-main: #2C3E50;
       --text-muted: #64748b;
-      --border: #e2e8f0;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      --radius: 12px;
+      --border: rgba(255, 255, 255, 0.4);
+      --shadow: 0 8px 32px 0 rgba(103, 58, 183, 0.15);
+      --radius: 16px;
     }
 
     * {
@@ -33,29 +36,32 @@
     }
 
     body {
-      background-color: var(--bg-color);
+      background: linear-gradient(135deg, #f5f7fa 0%, #ede9fe 100%);
+      background-attachment: fixed;
       color: var(--text-main);
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     nav {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
-      padding: 1rem 5%;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 1.2rem 5%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
       position: sticky;
       top: 0;
       z-index: 100;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     }
 
     nav h1 {
       font-size: 1.5rem;
       font-weight: 800;
-      background: linear-gradient(135deg, var(--primary), #ec4899);
+      background: linear-gradient(135deg, var(--primary), #9C27B0);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -69,13 +75,15 @@
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       margin-bottom: 2.5rem;
     }
 
     .stat-card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       padding: 2rem;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -83,6 +91,12 @@
       border: 1px solid var(--border);
       position: relative;
       overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px 0 rgba(103, 58, 183, 0.25);
     }
 
     .stat-card::before {
@@ -91,7 +105,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 4px;
+      height: 5px;
     }
 
     .stat-card.balance::before {
@@ -108,9 +122,10 @@
 
     .stat-card h3 {
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
+      font-weight: 600;
     }
 
     .stat-card p {
@@ -133,6 +148,8 @@
 
     .card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       padding: 2rem;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -140,57 +157,212 @@
       border: 1px solid var(--border);
     }
 
+    .card h2 {
+      color: var(--text-main);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    #search-collections {
+      padding: 0.85rem 1.2rem;
+      border-radius: 50px;
+      border: 1px solid rgba(103, 58, 183, 0.3);
+      background: rgba(255, 255, 255, 0.8);
+      width: 100%;
+      max-width: 350px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    #search-collections:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+      background: #ffffff;
+    }
+
     .table-responsive {
-      overflow-x: auto;
-      max-height: 250px;
-      /* Limit height */
+      max-height: 400px;
+      margin-top: 1rem;
       overflow-y: auto;
-      /* Enable vertical scroll */
+      overflow-x: auto;
+    }
+
+    /* Webkit scrollbar styling for glassmorphism */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(103, 58, 183, 0.3);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(103, 58, 183, 0.5);
     }
 
     table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      margin-top: 0.5rem;
     }
 
     th,
     td {
-      padding: 1rem 1.25rem;
+      padding: 1.2rem 1rem;
       text-align: left;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(103, 58, 183, 0.1);
     }
 
     th {
-      background-color: var(--bg-color);
-      font-weight: 600;
-      color: var(--text-muted);
-      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(4px);
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 0.9rem;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
       position: sticky;
       top: 0;
       z-index: 10;
+    }
+
+    tbody tr {
+      transition: background 0.3s ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.9);
     }
 
     footer {
       text-align: center;
       padding: 2rem;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(103, 58, 183, 0.1);
+      margin-top: 3rem;
     }
 
-    #search-collections {
-      padding: 0.75rem;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      width: 100%;
-      max-width: 300px;
-    }
-
+    /* Mobile Responsive - No Horizontal Scroll Stacked Cards */
     @media (max-width: 768px) {
       .stats-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .table-responsive {
+        max-height: 400px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 5px;
+        /* Add slight padding for scrollbar */
+      }
+
+      table,
+      thead,
+      tbody,
+      th,
+      td,
+      tr {
+        display: block;
+      }
+
+      thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+
+      tr {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(103, 58, 183, 0.15);
+        border-radius: var(--radius);
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      }
+
+      tr:hover {
+        background: rgba(255, 255, 255, 1);
+      }
+
+      td {
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        position: relative;
+        padding: 0.8rem 1rem 0.8rem 45%;
+        text-align: right;
+        min-height: 2.5rem;
+      }
+
+      td:last-child {
+        border-bottom: none;
+      }
+
+      td::before {
+        position: absolute;
+        top: 0.8rem;
+        left: 1rem;
+        width: 40%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+      }
+
+      /* Collection Table Labels */
+      #collections-table td:nth-of-type(1)::before {
+        content: "Date";
+      }
+
+      #collections-table td:nth-of-type(2)::before {
+        content: "Contributor";
+      }
+
+      #collections-table td:nth-of-type(3)::before {
+        content: "Amount";
+      }
+
+      /* Expense Table Labels */
+      #expenses-table td:nth-of-type(1)::before {
+        content: "Date";
+      }
+
+      #expenses-table td:nth-of-type(2)::before {
+        content: "Title";
+      }
+
+      #expenses-table td:nth-of-type(3)::before {
+        content: "Description";
+      }
+
+      #expenses-table td:nth-of-type(4)::before {
+        content: "Amount";
+      }
+
+      nav h1 {
+        font-size: 1.2rem;
+      }
+
+      .card {
+        padding: 1.5rem 1rem;
+      }
+
+      #search-collections {
+        max-width: 100%;
       }
     }
   </style>
@@ -644,7 +816,7 @@
       },
       {
         "id": "EXP8B7998A5",
-        "title": "Hire for Gi pipes and Box bars",
+        "title": "Hire for Gi pipes and Box bars)",
         "amount": 900,
         "date": "2026-03-09",
         "description": ""
@@ -717,4 +889,3 @@
 </body>
 
 </html>
-
