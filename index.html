@@ -1743,6 +1743,13 @@
     "amount": 1500,
     "date": "2026-03-12",
     "description": ""
+  },
+  {
+    "id": "EXPB3034CED",
+    "title": "Trailor shop (Afex)",
+    "amount": 1500,
+    "date": "2026-03-13",
+    "description": ""
   }
 ];
 
@@ -1777,7 +1784,7 @@
       const paidContributorIds = new Set(collections.filter(c => Number(c.amount) > 0).map(c => c.contributorId));
       let boysPaidCount = 0;
       let girlsPaidCount = 0;
-      
+
       paidContributorIds.forEach(id => {
         const contributor = contributors.find(c => c.id === id);
         if (contributor) {
@@ -1788,7 +1795,7 @@
 
       const statBoys = document.getElementById('stat-boys-paid');
       if (statBoys) statBoys.textContent = boysPaidCount;
-      
+
       const statGirls = document.getElementById('stat-girls-paid');
       if (statGirls) statGirls.textContent = girlsPaidCount;
 
