@@ -365,6 +365,90 @@
         max-width: 100%;
       }
     }
+
+    /* Tabs & Modal Styles */
+    .tabs {
+      display: inline-flex;
+      background: var(--border);
+      padding: 0.35rem;
+      border-radius: 50px;
+      box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm equivalent */
+      gap: 0;
+      position: relative;
+    }
+    .tab-btn {
+      padding: 0.5rem 1.5rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 2;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), #9C27B0);
+      color: white;
+      box-shadow: 0 4px 12px rgba(103, 58, 183, 0.3);
+      transform: scale(1.02);
+    }
+    .tab-btn:hover:not(.active) {
+      background: rgba(255,255,255,0.5);
+      color: var(--primary);
+    }
+    
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1050;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+    }
+    .modal-content.contributors-list {
+      background: var(--bg-color);
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      line-height: 1;
+    }
+    .modal-close:hover {
+      color: var(--danger);
+    }
+    .contributor-item {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(103, 58, 183, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    .contributor-item:hover {
+      background: rgba(255,255,255,0.8);
+    }
+    .contributor-item:last-child {
+      border-bottom: none;
+    }
   </style>
 </head>
 
@@ -390,13 +474,19 @@
     </div>
 
     <div class="card">
-      <h2>Contributors Details</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+        <h2 style="margin-bottom: 0;">Contributors Details</h2>
+        <div class="tabs">
+          <button class="tab-btn active" data-round="first">First Round</button>
+          <button class="tab-btn" data-round="second">Second Round</button>
+        </div>
+      </div>
       <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 0;">
-        <div class="stat-card balance" style="background: rgba(59, 130, 246, 0.1); border-left-color: #3b82f6;">
+        <div class="stat-card balance" id="card-boys-paid" style="background: rgba(59, 130, 246, 0.1); border-left-color: #3b82f6; cursor: pointer; transition: transform 0.2s;" title="Click to view all boys paid">
           <h3>Boys Paid</h3>
           <p id="stat-boys-paid">0</p>
         </div>
-        <div class="stat-card income" style="background: rgba(236, 72, 153, 0.1); border-left-color: #ec4899;">
+        <div class="stat-card income" id="card-girls-paid" style="background: rgba(236, 72, 153, 0.1); border-left-color: #ec4899; cursor: pointer; transition: transform 0.2s;" title="Click to view all girls paid">
           <h3>Girls Paid</h3>
           <p id="stat-girls-paid">0</p>
         </div>
@@ -406,7 +496,11 @@
     <div class="card">
       <div
         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
-        <h2>Collections</h2>
+        <h2 style="margin-bottom: 0;">Collections</h2>
+        <div class="tabs">
+          <button class="tab-btn active" data-round="first">First Round</button>
+          <button class="tab-btn" data-round="second">Second Round</button>
+        </div>
         <input type="text" id="search-collections" list="contributors-list" placeholder="Search by Contributor Name...">
         <datalist id="contributors-list"></datalist>
       </div>
@@ -417,6 +511,7 @@
               <th>Date</th>
               <th>Contributor</th>
               <th>Amount</th>
+              <th>Round</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -447,6 +542,15 @@
     <p>Developed by <a href="https://darkshadow110.github.io/thilankawishka/" target="_blank"
         style="color: var(--primary); text-decoration: none; font-weight: bold;">Thilan Kawishka</a></p>
   </footer>
+
+  <!-- Modal for Paid Contributors -->
+  <div id="contributors-modal" class="modal-overlay">
+    <div class="modal-content contributors-list">
+      <span class="modal-close" id="close-modal">&times;</span>
+      <h2 id="modal-title" style="margin-bottom: 1rem; color: var(--text-main); font-weight: 700; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">Paid Contributors</h2>
+      <div id="modal-list" style="margin-top: 1rem;"></div>
+    </div>
+  </div>
 
   <script>
     // Data Inputs
@@ -1078,6 +1182,12 @@
   {
     "id": "CA1DB6986",
     "name": "Camero",
+    "gender": "Male",
+    "active": true
+  },
+  {
+    "id": "CB9E3524E",
+    "name": "Neuro",
     "gender": "Male",
     "active": true
   }
@@ -1874,6 +1984,45 @@
     "amount": 1000,
     "date": "2026-03-20",
     "type": "weekly"
+  },
+  {
+    "id": "COLDE7C22CC",
+    "contributorId": "CB9E3524E",
+    "amount": 2000,
+    "date": "2026-03-18",
+    "type": "weekly"
+  },
+  {
+    "id": "COL4E45ACD3",
+    "contributorId": "C181EADA7",
+    "amount": 1000,
+    "date": "2026-03-20",
+    "type": "weekly",
+    "round": "second"
+  },
+  {
+    "id": "COL9E980FBA",
+    "contributorId": "C06015945",
+    "amount": 1500,
+    "date": "2026-03-21",
+    "type": "weekly",
+    "round": "second"
+  },
+  {
+    "id": "COL6CB2FB10",
+    "contributorId": "C2C5DB250",
+    "amount": 2000,
+    "date": "2026-03-20",
+    "type": "weekly",
+    "round": "second"
+  },
+  {
+    "id": "COLB20ABEC7",
+    "contributorId": "C1962B859",
+    "amount": 1000,
+    "date": "2026-03-21",
+    "type": "weekly",
+    "round": "second"
   }
 ];
 
@@ -2212,7 +2361,7 @@
     "title": "Wisel Boards (Wesper)",
     "amount": 1000,
     "date": "2026-03-17",
-    "description": "Pending bills"
+    "description": "https://drive.google.com/file/d/1M64Mw0NVI7GoAebfe-PMVF8YTizfBU5k/view?usp=sharing"
   },
   {
     "id": "EXPB2681C43",
@@ -2276,6 +2425,20 @@
     "amount": 170,
     "date": "2026-03-19",
     "description": ""
+  },
+  {
+    "id": "EXPC633FD99",
+    "title": "Cement (Eric)",
+    "amount": 3500,
+    "date": "2026-03-20",
+    "description": "pending bills"
+  },
+  {
+    "id": "EXP527A68E9",
+    "title": "wire mesh (Gems)",
+    "amount": 6000,
+    "date": "2026-03-21",
+    "description": "pending bills"
   }
 ];
 
@@ -2285,29 +2448,29 @@
       return person ? person.name : "Unknown";
     };
 
-    function initDashboard() {
-      // Search all contributors setup
-      const dataList = document.getElementById('contributors-list');
-      if (dataList) {
-        dataList.innerHTML = '';
-        contributors.forEach(c => {
-          dataList.innerHTML += `<option value="${c.name}">`;
-        });
-      }
+    let currentRound = 'first';
 
-      // 1. Calculate Totals
+    function updateStats() {
+      // Filter collections by selected round
+      const roundCollections = collections.filter(c => {
+        const round = c.round || 'first';
+        return round === currentRound;
+      });
+
+      // 1. Calculate Global Totals (across all rounds)
       const totalCollected = collections.reduce((sum, item) => sum + item.amount, 0);
       const totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0);
       const balance = totalCollected - totalExpenses;
 
-      // 2. Update Stats DOM
       document.getElementById('stat-collected').textContent = `Rs. ${totalCollected.toLocaleString()}`;
       document.getElementById('stat-expenses').textContent = `Rs. ${totalExpenses.toLocaleString()}`;
       document.getElementById('stat-balance').textContent = `Rs. ${balance.toLocaleString()}`;
-      document.getElementById('year').textContent = new Date().getFullYear();
+      
+      const yearEl = document.getElementById('year');
+      if(yearEl) yearEl.textContent = new Date().getFullYear();
 
-      // Calculate boys & girls paid stats
-      const paidContributorIds = new Set(collections.filter(c => Number(c.amount) > 0).map(c => c.contributorId));
+      // Calculate boys & girls paid stats FOR SELECTED ROUND
+      const paidContributorIds = new Set(roundCollections.filter(c => Number(c.amount) > 0).map(c => c.contributorId));
       let boysPaidCount = 0;
       let girlsPaidCount = 0;
 
@@ -2325,47 +2488,132 @@
       const statGirls = document.getElementById('stat-girls-paid');
       if (statGirls) statGirls.textContent = girlsPaidCount;
 
-      // 3. Render Expenses
-      const expBody = document.querySelector('#expenses-table tbody');
-      expBody.innerHTML = '';
-
-      const sortedExpenses = [...expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      sortedExpenses.forEach(exp => {
-        // Detect URLs and turn them into clickable links
-        const descriptionHtml = exp.description.replace(
-          /(https?:\/\/[^\s]+)/g,
-          '<a href="$1" target="_blank" style="color: var(--primary); text-decoration: underline;">View Link</a>'
-        );
-        const row = `<tr><td>${exp.date}</td><td>${exp.title}</td><td>${descriptionHtml}</td><td>Rs. ${exp.amount}</td></tr>`;
-        expBody.innerHTML += row;
-      });
-
-      // 4. Render Collections (with search support)
-      renderCollections(collections);
+      // Render Collections with current filter and search
+      const term = (document.getElementById('search-collections').value || '').toLowerCase();
+      renderCollections(roundCollections, term);
     }
-
-    function renderCollections(data) {
+    
+    function renderCollections(data, searchTerm = '') {
       const collBody = document.querySelector('#collections-table tbody');
+      if (!collBody) return;
       collBody.innerHTML = '';
 
-      // Sort data by date descending (newest first)
-      const sortedData = [...data].sort((a, b) => new Date(b.date) - new Date(a.date));
+      let filteredData = data;
+      if (searchTerm) {
+        filteredData = data.filter(col => getContributorName(col.contributorId).toLowerCase().includes(searchTerm));
+      }
+
+      const sortedData = [...filteredData].sort((a, b) => new Date(b.date) - new Date(a.date));
 
       sortedData.forEach(col => {
-        const row = `<tr><td>${col.date}</td><td>${getContributorName(col.contributorId)}</td><td>Rs. ${col.amount}</td></tr>`;
+        const roundText = (!col.round || col.round === 'first') ? '1st Round' : '2nd Round';
+        const row = `<tr>
+          <td>${col.date}</td>
+          <td>${getContributorName(col.contributorId)}</td>
+          <td>Rs. ${col.amount}</td>
+          <td><span style="background: var(--primary-light); color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">${roundText}</span></td>
+        </tr>`;
         collBody.innerHTML += row;
       });
     }
 
-    // Search Logic
-    document.getElementById('search-collections').addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      const filtered = collections.filter(col =>
-        getContributorName(col.contributorId).toLowerCase().includes(term)
-      );
-      renderCollections(filtered);
-    });
+    function initDashboard() {
+      // Search all contributors setup
+      const dataList = document.getElementById('contributors-list');
+      if (dataList) {
+        dataList.innerHTML = '';
+        contributors.forEach(c => {
+          dataList.innerHTML += `<option value="${c.name}">`;
+        });
+      }
+
+      // 3. Render Expenses
+      const expBody = document.querySelector('#expenses-table tbody');
+      if (expBody) {
+        expBody.innerHTML = '';
+        const sortedExpenses = [...expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        sortedExpenses.forEach(exp => {
+          const descriptionHtml = exp.description.replace(
+            /(https?:\/\/[^\s]+)/g,
+            '<a href="$1" target="_blank" style="color: var(--primary); text-decoration: underline;">View Link</a>'
+          );
+          const row = `<tr><td>${exp.date}</td><td>${exp.title}</td><td>${descriptionHtml}</td><td>Rs. ${exp.amount}</td></tr>`;
+          expBody.innerHTML += row;
+        });
+      }
+
+      // Tab handlers
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const round = e.target.getAttribute('data-round');
+          currentRound = round;
+          
+          document.querySelectorAll('.tab-btn').forEach(b => {
+            if (b.getAttribute('data-round') === round) {
+              b.classList.add('active');
+            } else {
+              b.classList.remove('active');
+            }
+          });
+          
+          updateStats();
+        });
+      });
+
+      // Modal Logic
+      const modal = document.getElementById('contributors-modal');
+      const closeBtn = document.getElementById('close-modal');
+      
+      const openModal = (gender) => {
+        const roundCollections = collections.filter(c => {
+          const r = c.round || 'first';
+          return r === currentRound;
+        });
+        
+        const paidContributorIds = new Set(roundCollections.filter(c => Number(c.amount) > 0).map(c => c.contributorId));
+        const paidPeople = [];
+        
+        paidContributorIds.forEach(id => {
+          const c = contributors.find(x => x.id === id);
+          if (c && c.gender === gender) paidPeople.push(c);
+        });
+        
+        paidPeople.sort((a, b) => a.name.localeCompare(b.name));
+        
+        document.getElementById('modal-title').textContent = `Paid Contributors - ${gender === 'Male' ? 'Boys' : 'Girls'} (${currentRound === 'first' ? '1st Round' : '2nd Round'})`;
+        
+        const listEl = document.getElementById('modal-list');
+        listEl.innerHTML = '';
+        if (paidPeople.length === 0) {
+          listEl.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 1.5rem 0;">No contributors found.</p>';
+        } else {
+          paidPeople.forEach((p, idx) => {
+             listEl.innerHTML += `<div class="contributor-item">
+               <span><strong>${idx + 1}.</strong> ${p.name}</span> 
+               <span style="color: var(--success); font-weight: bold; background: var(--success-bg); padding: 2px 10px; border-radius: 12px; font-size: 0.85rem;">Paid</span>
+             </div>`;
+          });
+        }
+        
+        modal.style.display = 'flex';
+      };
+
+      document.getElementById('card-boys-paid').addEventListener('click', () => openModal('Male'));
+      document.getElementById('card-girls-paid').addEventListener('click', () => openModal('Female'));
+      
+      closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.style.display = 'none';
+      });
+
+      // Search Handler
+      document.getElementById('search-collections').addEventListener('input', (e) => {
+        updateStats(); // Will use the search value
+      });
+
+      updateStats();
+    }
 
     window.onload = initDashboard;
   </script>
