@@ -471,6 +471,10 @@
         <h3>Total Expenses</h3>
         <p id="stat-expenses">Rs. 0</p>
       </div>
+      <div class="stat-card balance" style="background: rgba(139, 92, 246, 0.1); border-left-color: #8b5cf6;">
+        <h3>Total Loans</h3>
+        <p id="stat-loans">Rs. 0</p>
+      </div>
     </div>
 
     <div class="card">
@@ -527,6 +531,23 @@
             <tr>
               <th>Date</th>
               <th>Title</th>
+              <th>Description</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>Loans</h2>
+      <div class="table-responsive">
+        <table id="loans-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Contributor</th>
               <th>Description</th>
               <th>Amount</th>
             </tr>
@@ -1206,6 +1227,12 @@
   {
     "id": "CB43E4D08",
     "name": "Rambo",
+    "gender": "Male",
+    "active": true
+  },
+  {
+    "id": "C0F912356",
+    "name": "Neto",
     "gender": "Male",
     "active": true
   }
@@ -2257,6 +2284,38 @@
     "date": "2026-03-23",
     "type": "weekly",
     "round": "second"
+  },
+  {
+    "id": "COL281708A0",
+    "contributorId": "C1AE09728",
+    "amount": 1000,
+    "date": "2026-03-23",
+    "type": "weekly",
+    "round": "second"
+  },
+  {
+    "id": "COL8211C3E6",
+    "contributorId": "CABCDE5DC",
+    "amount": 2000,
+    "date": "2026-03-23",
+    "type": "weekly",
+    "round": "second"
+  },
+  {
+    "id": "COL84382E1D",
+    "contributorId": "C3AE353C8",
+    "amount": 2000,
+    "date": "2026-03-24",
+    "type": "weekly",
+    "round": "second"
+  },
+  {
+    "id": "COLEBA8FBD1",
+    "contributorId": "C0F912356",
+    "amount": 2000,
+    "date": "2026-03-24",
+    "type": "weekly",
+    "round": "first"
   }
 ];
 
@@ -2759,11 +2818,105 @@
     "description": "bills pending"
   },
   {
-    "id": "EXP01A32617",
-    "title": "Paints (Void)",
-    "amount": 18500,
+    "id": "EXPF26D6AF7",
+    "title": "Invitation items (Void)",
+    "amount": 800,
     "date": "2026-03-23",
+    "description": "https://drive.google.com/file/d/1COAvVuxnRjz1tIADDxdy3J-bZjcBdqf4/view?usp=sharing"
+  },
+  {
+    "id": "EXPE817BBA1",
+    "title": "Invitation items (Void)",
+    "amount": 1265,
+    "date": "2026-03-23",
+    "description": "https://drive.google.com/file/d/1OqjzXQTIN8ifYJV9u3CwFD9zZLKjWGWB/view?usp=sharing"
+  },
+  {
+    "id": "EXPB468EA77",
+    "title": "Invitation items (Void)",
+    "amount": 600,
+    "date": "2026-03-23",
+    "description": "https://drive.google.com/file/d/1XIKRkIXts1M4XV8EraJTRi3L3auGo3Fs/view?usp=sharing"
+  },
+  {
+    "id": "EXP115B2F73",
+    "title": "Kohu Lanu (Void)",
+    "amount": 800,
+    "date": "2026-03-23",
+    "description": "https://drive.google.com/file/d/1d7KvprxF7IO0oi44i4Us5_pnzHATAX8O/view?usp=sharing"
+  },
+  {
+    "id": "EXP07D2BE6C",
+    "title": "Paints (Void)",
+    "amount": 16000,
+    "date": "2026-03-23",
+    "description": "https://drive.google.com/file/d/1W68cLplm1qEci4JffX4j38jNdb1FLNN3/view?usp=sharing"
+  },
+  {
+    "id": "EXPA443BF42",
+    "title": "Regiforms (Kairo)",
+    "amount": 16080,
+    "date": "2026-03-23",
+    "description": "https://drive.google.com/file/d/1KuxpyGVvFJpIZkCE--Yx0srH7CRXITqR/view?usp=sharing"
+  },
+  {
+    "id": "EXP744D8ED2",
+    "title": "Hire for Regi forms (Kairo)",
+    "amount": 600,
+    "date": "2026-03-23",
+    "description": ""
+  },
+  {
+    "id": "EXPFA2F829E",
+    "title": "Cutting Disks (Reed)",
+    "amount": 300,
+    "date": "2026-03-23",
+    "description": "https://drive.google.com/file/d/1Vk7UGKkUJZkTEGb8FwvM2zSVjN6-PHFZ/view?usp=sharing"
+  },
+  {
+    "id": "EXPAB800C64",
+    "title": "Flour (Reed)",
+    "amount": 1000,
+    "date": "2026-03-23",
+    "description": "https://drive.google.com/file/d/1BsVDBBR5sD_XRALnuEqyd7xEOtGYhCh9/view?usp=sharing"
+  },
+  {
+    "id": "EXP34DC1EE4",
+    "title": "Kale Kambi 6k (Reed)",
+    "amount": 1980,
+    "date": "2026-03-23",
+    "description": "Bill pending (eric)"
+  },
+  {
+    "id": "EXPCCB4E6E5",
+    "title": "Wes munu (Odin)",
+    "amount": 2000,
+    "date": "2026-03-24",
+    "description": "Bill pending"
+  },
+  {
+    "id": "EXP7AEB4A18",
+    "title": "Print outs and binder gum (Apex) ",
+    "amount": 2300,
+    "date": "2026-03-24",
     "description": "bills pending"
+  }
+];
+
+    const loans = [
+  {
+    "id": "LOAN802975CC",
+    "contributorId": "C2C5DB250",
+    "amount": 6965,
+    "date": "2026-03-23",
+    "description": "Invitation items"
+  },
+  {
+    "id": "LOANCA32470D",
+    "contributorId": "CCBA8650F",
+    "amount": 12750,
+    "date": "2026-03-23",
+    "description": "regi forms"
   }
 ];
 
@@ -2785,10 +2938,12 @@
       // 1. Calculate Global Totals (across all rounds)
       const totalCollected = collections.reduce((sum, item) => sum + item.amount, 0);
       const totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0);
-      const balance = totalCollected - totalExpenses;
+      const totalLoans = loans.reduce((sum, item) => sum + item.amount, 0);
+      const balance = totalCollected + totalLoans - totalExpenses;
 
       document.getElementById('stat-collected').textContent = `Rs. ${totalCollected.toLocaleString()}`;
       document.getElementById('stat-expenses').textContent = `Rs. ${totalExpenses.toLocaleString()}`;
+      document.getElementById('stat-loans').textContent = `Rs. ${totalLoans.toLocaleString()}`;
       document.getElementById('stat-balance').textContent = `Rs. ${balance.toLocaleString()}`;
       
       const yearEl = document.getElementById('year');
@@ -2865,6 +3020,19 @@
           );
           const row = `<tr><td>${exp.date}</td><td>${exp.title}</td><td>${descriptionHtml}</td><td>Rs. ${exp.amount}</td></tr>`;
           expBody.innerHTML += row;
+        });
+      }
+
+      // 4. Render Loans
+      const loanBody = document.querySelector('#loans-table tbody');
+      if (loanBody) {
+        loanBody.innerHTML = '';
+        const sortedLoans = [...loans].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        sortedLoans.forEach(l => {
+          const amountHtml = l.amount < 0 ? `<span style="color: var(--danger)">-Rs. ${Math.abs(l.amount).toLocaleString()}</span>` : `<span style="color: var(--success)">Rs. ${l.amount.toLocaleString()}</span>`;
+          const row = `<tr><td>${l.date}</td><td>${getContributorName(l.contributorId)}</td><td>${l.description || ''}</td><td>${amountHtml}</td></tr>`;
+          loanBody.innerHTML += row;
         });
       }
 
